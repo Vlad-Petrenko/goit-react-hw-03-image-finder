@@ -1,5 +1,6 @@
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Loader } from '../Loader/Loader';
 import { Button } from '../Button/Button';
 import styles from './ImageGallery.module.css';
@@ -13,8 +14,16 @@ export class ImageGallery extends Component {
     imageSelected: null,
   };
 
+  static propTypes = {
+    onClick: PropTypes.func.isRequired,
+    fetchImg: PropTypes.func.isRequired,
+    imgName: PropTypes.string.isRequired,
+    page: PropTypes.number.isRequired,
+  };
+
   componentDidUpdate(prevProps) {
     const { imgName, page, fetchImg } = this.props;
+
     this.galleryClean(prevProps);
 
     if (prevProps !== this.props) {
@@ -58,6 +67,7 @@ export class ImageGallery extends Component {
   render() {
     const { onClick } = this.props;
     const { fullGallery, status, showModal, imageSelected } = this.state;
+
     return (
       <div className={styles.container}>
         <ul className={styles.gallery}>

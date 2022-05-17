@@ -40,6 +40,7 @@ export class App extends Component {
           imgName={this.state.imgName}
           page={this.state.page}
         />
+        
       </div>
     );
   }

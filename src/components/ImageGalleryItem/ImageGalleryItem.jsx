@@ -1,4 +1,5 @@
 import styles from './ImageGalleryItem.module.css';
+import PropTypes from 'prop-types';
 
 export const ImageGalleryItem = ({ webSrc, alt, toggleModal }) => {
   return (
@@ -12,4 +13,10 @@ export const ImageGalleryItem = ({ webSrc, alt, toggleModal }) => {
       />
     </li>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+  webSrc: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
 };
