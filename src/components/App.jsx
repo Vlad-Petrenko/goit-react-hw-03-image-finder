@@ -53,7 +53,7 @@ export class App extends Component {
           page === 1 && toast.success(`Found ${imgArray.totalHits} images`);
         }
 
-        if (this.state.fullGallery.length >= imgArray.totalHits) {
+        if (fullGallery.length >= imgArray.totalHits) {
           toast.warn('End of list reached');
         }
 
