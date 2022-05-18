@@ -1,94 +1,35 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
-import { Loader } from '../Loader/Loader';
-import { Button } from '../Button/Button';
+
 import styles from './ImageGallery.module.css';
-import { Modal } from 'components/Modal/Modal';
 
 export class ImageGallery extends Component {
-  state = {
-    fullGallery: [],
-    status: 'idle',
-    showModal: false,
-    imageSelected: null,
-  };
-
   static propTypes = {
-    onClick: PropTypes.func.isRequired,
-    fetchImg: PropTypes.func.isRequired,
-    imgName: PropTypes.string.isRequired,
-    page: PropTypes.number.isRequired,
-  };
-
-  componentDidUpdate(prevProps) {
-    const { imgName, page, fetchImg } = this.props;
-
-    this.galleryClean(prevProps);
-
-    if (prevProps !== this.props) {
-      this.setState({ status: 'pending' });
-      fetchImg(imgName, page).then(imgName =>
-        this.setState(({ fullGallery }) => ({
-          fullGallery: [...fullGallery, ...imgName.hits],
-          status: 'resolved',
-        }))
-      );
-    }
-    this.scrollBottom();
-  }
-
-  galleryClean = prevProps => {
-    const { imgName } = this.props;
-    const prevImgName = prevProps.imgName;
-
-    if (prevImgName !== imgName) {
-      this.setState(() => ({
-        fullGallery: [],
-      }));
-    }
-  };
-
-  scrollBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      left: 0,
-      behavior: 'smooth',
-    });
-  };
-
-  toggleModal = img => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-    this.setState({ imageSelected: img });
+    status: PropTypes.string.isRequired,
+    fullGallery: PropTypes.array.isRequired,
+    toggleModal: PropTypes.func.isRequired,
   };
 
   render() {
-    const { onClick } = this.props;
-    const { fullGallery, status, showModal, imageSelected } = this.state;
+    const { toggleModal, fullGallery } = this.props;
 
     return (
-      <div className={styles.container}>
-        <ul className={styles.gallery}>
-          {fullGallery.map(img => {
-            const { id, webformatURL, tags } = img;
-            return (
-              <ImageGalleryItem
-                toggleModal={() => this.toggleModal(img)}
-                key={id}
-                webSrc={webformatURL}
-                alt={tags}
-              />
-            );
-          })}
-        </ul>
-        {showModal && (
-          <Modal imageSelected={imageSelected} toggleModal={this.toggleModal} />
-        )}
-        {status === 'resolved' && <Button onClick={onClick} />}
-        {status === 'pending' && <Loader />}
-      </div>
+      <ul className={styles.gallery}>
+        {fullGallery.map(img => {
+          const { id, webformatURL, tags, largeImageURL } = img;
+          return (
+            <ImageGalleryItem
+              toggleModal={() => toggleModal(largeImageURL, tags)}
+              key={id}
+              webSrc={webformatURL}
+              alt={tags}
+            />
+          );
+        })}
+      </ul>
     );
   }
 }
+
+

@@ -8,7 +8,7 @@ export class Searchbar extends Component {
   state = {
     imgName: '',
   };
-  
+
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
   };
@@ -18,36 +18,37 @@ export class Searchbar extends Component {
   };
 
   handleSubmit = event => {
+    const { imgName } = this.state;
+    const { onSubmit } = this.props;
     event.preventDefault();
-    if (this.state.imgName === '') {
-      return toast.warn('Enter something, please', {
-        autoClose: 3000,
-      });
+
+    if (imgName === '') {
+      return toast.warn('Enter something, please');
     }
-    this.props.onSubmit(this.state.imgName);
+
+    onSubmit(this.state.imgName);
     this.setState({ imgName: '' });
   };
 
   render() {
     return (
-      <>
-        <header className={styles.searchbar}>
-          <form onSubmit={this.handleSubmit} className={styles.form}>
-            <ToastContainer />
-            <button type="submit" className={styles.button}>
-              <span className={styles.buttonLabel}></span>
-            </button>
-            <input
-              onChange={this.handleNameChange}
-              className={styles.input}
-              type="text"
-              autoComplete="off"
-              autoFocus
-              placeholder="Search images and photos"
-            />
-          </form>
-        </header>
-      </>
+      <header className={styles.searchbar}>
+        <form onSubmit={this.handleSubmit} className={styles.form}>
+          <ToastContainer />
+          <button type="submit" className={styles.button}>
+            <span className={styles.buttonLabel}></span>
+          </button>
+          <input
+            onChange={this.handleNameChange}
+            className={styles.input}
+            value={this.state.imgName}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </form>
+      </header>
     );
   }
 }

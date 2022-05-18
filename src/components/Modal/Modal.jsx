@@ -10,6 +10,7 @@ export class Modal extends Component {
     }).isRequired,
     toggleModal: PropTypes.func.isRequired,
   };
+  
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }
