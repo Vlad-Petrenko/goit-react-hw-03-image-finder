@@ -18,6 +18,10 @@ export class App extends Component {
   };
 
   handleFormSubmit = imgName => {
+    if (imgName === this.state.imgName) {
+      return;
+    }
+
     this.setState({
       imgName,
       page: 1,
@@ -26,7 +30,7 @@ export class App extends Component {
 
   fetchImg = async (imgName, page) => {
     const response = await fetch(
-      `https://pixabay.com/api/?q=${imgName}&page=${page}&key=27112752-ba9c06a82163f4d21667ea4bf&image_type=photo&orientation=horizontal&per_page=6`
+      `https://pixabay.com/api/?q=${imgName}&page=${page}&key=27112752-ba9c06a82163f4d21667ea4bf&image_type=photo&orientation=horizontal&per_page=12`
     );
     if (response.ok) {
       return response.json();
@@ -39,6 +43,7 @@ export class App extends Component {
 
     if (prevState.imgName !== imgName || prevState.page !== page) {
       this.galleryClean(prevState);
+      this.setState({ status: 'pending' });
       this.fetchImg(imgName, page).then(imgArray => {
         const newImgArray = imgArray.hits.map(
           ({ id, tags, webformatURL, largeImageURL }) => {
@@ -53,14 +58,15 @@ export class App extends Component {
           page === 1 && toast.success(`Found ${imgArray.totalHits} images`);
         }
 
-        if (fullGallery.length >= imgArray.totalHits) {
-          toast.warn('End of list reached');
-        }
-
         this.setState(({ fullGallery }) => ({
           fullGallery: [...fullGallery, ...newImgArray],
           status: 'resolved',
         }));
+
+        if (fullGallery.length + 12 === imgArray.totalHits) {
+          toast.warn('End of list reached');
+          this.setState({ status: 'idle' });
+        }
       });
     }
     this.scrollBottom();
@@ -105,7 +111,6 @@ export class App extends Component {
       <div className={styles.App}>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery
-          status={status}
           fullGallery={fullGallery}
           toggleModal={this.toggleModal}
         />

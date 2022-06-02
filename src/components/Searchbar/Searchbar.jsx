@@ -26,8 +26,7 @@ export class Searchbar extends Component {
       return toast.warn('Enter something, please');
     }
 
-    onSubmit(this.state.imgName);
-    this.setState({ imgName: '' });
+    onSubmit(imgName);
   };
 
   render() {

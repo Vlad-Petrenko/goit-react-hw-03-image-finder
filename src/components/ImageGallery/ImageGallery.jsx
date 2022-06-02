@@ -6,8 +6,14 @@ import styles from './ImageGallery.module.css';
 
 export class ImageGallery extends Component {
   static propTypes = {
-    status: PropTypes.string.isRequired,
-    fullGallery: PropTypes.array.isRequired,
+    fullGallery: PropTypes.arrayOf(
+      PropTypes.shape({
+        largeImageURL: PropTypes.string.isRequired,
+        tags: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+        webformatURL: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     toggleModal: PropTypes.func.isRequired,
   };
 
@@ -31,5 +37,3 @@ export class ImageGallery extends Component {
     );
   }
 }
-
-
